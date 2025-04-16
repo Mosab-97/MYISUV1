@@ -1,0 +1,70 @@
+{
+  "common": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "fullName": "Full Name",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success!"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "courses": "Courses",
+    "contact": "Contact",
+    "language": "العربية"
+  },
+  "auth": {
+    "loginTitle": "Welcome Back",
+    "registerTitle": "Create Account",
+    "emailVerification": "Please check your email for verification",
+    "invalidCredentials": "Invalid email or password",
+    "passwordMismatch": "Passwords do not match"
+  },
+  "dashboard": {
+    "student": {
+      "title": "Student Dashboard",
+      "myCourses": "My Courses",
+      "noCourses": "No courses enrolled yet",
+      "attendance": "Attendance",
+      "noAttendance": "No attendance records yet",
+      "grades": "Grades",
+      "noGrades": "No grades posted yet",
+      "clockIn": "Clock In",
+      "clockOut": "Clock Out",
+      "outsideWindow": "Clock-in is only available 15 minutes before and after class time",
+      "alreadyClockedIn": "Already clocked in for today",
+      "status": {
+        "present": "Present",
+        "late": "Late",
+        "absent": "Absent"
+      }
+    },
+    "faculty": {
+      "title": "Faculty Dashboard",
+      "manageCourses": "Manage Courses",
+      "studentAttendance": "Student Attendance",
+      "postGrades": "Post Grades",
+      "messages": "Messages",
+      "noCourses": "No courses created yet",
+      "noMessages": "No messages received yet",
+      "createCourse": "Create Course",
+      "courseName": "Course Name",
+      "courseCode": "Course Code"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "message": "Message",
+    "sent": "Message sent successfully"
+  }
+}

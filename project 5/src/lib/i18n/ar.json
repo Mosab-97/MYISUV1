@@ -1,0 +1,70 @@
+{
+  "common": {
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "fullName": "الاسم الكامل",
+    "submit": "إرسال",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "success": "تم بنجاح!"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "dashboard": "لوحة التحكم",
+    "courses": "المقررات",
+    "contact": "اتصل بنا",
+    "language": "English"
+  },
+  "auth": {
+    "loginTitle": "مرحباً بعودتك",
+    "registerTitle": "إنشاء حساب جديد",
+    "emailVerification": "يرجى التحقق من بريدك الإلكتروني للتفعيل",
+    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "passwordMismatch": "كلمات المرور غير متطابقة"
+  },
+  "dashboard": {
+    "student": {
+      "title": "لوحة تحكم الطالب",
+      "myCourses": "مقرراتي",
+      "noCourses": "لم يتم التسجيل في أي مقرر بعد",
+      "attendance": "الحضور",
+      "noAttendance": "لا يوجد سجل حضور بعد",
+      "grades": "الدرجات",
+      "noGrades": "لم يتم رصد درجات بعد",
+      "clockIn": "تسجيل الحضور",
+      "clockOut": "تسجيل الانصراف",
+      "outsideWindow": "تسجيل الحضور متاح فقط قبل وبعد موعد المحاضرة بـ 15 دقيقة",
+      "alreadyClockedIn": "تم تسجيل الحضور لهذا اليوم",
+      "status": {
+        "present": "حاضر",
+        "late": "متأخر",
+        "absent": "غائب"
+      }
+    },
+    "faculty": {
+      "title": "لوحة تحكم عضو هيئة التدريس",
+      "manageCourses": "إدارة المقررات",
+      "studentAttendance": "حضور الطلاب",
+      "postGrades": "رصد الدرجات",
+      "messages": "الرسائل",
+      "noCourses": "لم يتم إنشاء مقررات بعد",
+      "noMessages": "لا توجد رسائل جديدة",
+      "createCourse": "إنشاء مقرر",
+      "courseName": "اسم المقرر",
+      "courseCode": "رمز المقرر"
+    }
+  },
+  "contact": {
+    "title": "اتصل بنا",
+    "message": "الرسالة",
+    "sent": "تم إرسال الرسالة بنجاح"
+  }
+}
