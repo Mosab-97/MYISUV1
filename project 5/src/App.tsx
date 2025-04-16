@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Contact from './pages/Contact';
+import StudentDashboard from './components/StudentDashboard';
+import FacultyDashboard from './components/FacultyDashboard';
 import './lib/i18n';
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/student-dashboard" element={<StudentDashboard />} />
+            <Route path="/faculty-dashboard" element={<FacultyDashboard />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/" element={<Login />} />
           </Routes>
@@ -30,3 +34,4 @@ function App() {
 }
 
 export default App;
+

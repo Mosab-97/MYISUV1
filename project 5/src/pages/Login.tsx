@@ -18,13 +18,27 @@ const Login = () => {
     setError('');
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) throw error;
-      navigate('/dashboard');
+
+      // Once logged in, retrieve the user role from metadata
+      const userRole = data?.user?.user_metadata?.role; // Check user metadata for role
+
+      if (userRole === 'student') {
+        // Navigate to student dashboard if role is 'student'
+        navigate('/student-dashboard');
+      } else if (userRole === 'faculty') {
+        // Navigate to faculty dashboard if role is 'faculty'
+        navigate('/faculty-dashboard');
+      } else {
+        // Handle the case where no role is assigned or an invalid role
+        setError(t('auth.invalidRole'));
+        navigate('/login');  // Optional: redirect to login or an error page
+      }
     } catch (err: any) {
       setError(t('auth.invalidCredentials'));
     } finally {
@@ -97,3 +111,4 @@ const Login = () => {
 };
 
 export default Login;
+

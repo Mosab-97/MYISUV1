@@ -15,11 +15,13 @@ const Register = () => {
   const [role, setRole] = useState<UserRole>('student');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); // ✅ New state
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccessMessage('');
 
     if (password !== confirmPassword) {
       setError(t('auth.passwordMismatch'));
@@ -40,8 +42,13 @@ const Register = () => {
       });
 
       if (signUpError) throw signUpError;
-      
-      navigate('/login');
+
+      setSuccessMessage('🎉 Registration successful! Redirecting to login...');
+
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -60,6 +67,14 @@ const Register = () => {
           {t('auth.registerTitle')}
         </h1>
 
+        {/* ✅ Success message */}
+        {successMessage && (
+          <div className="bg-green-50 text-green-700 p-3 rounded-md mb-4">
+            {successMessage}
+          </div>
+        )}
+
+        {/* ❌ Error message */}
         {error && (
           <div className="bg-red-50 text-red-600 p-3 rounded-md mb-4">
             {error}
@@ -148,3 +163,4 @@ const Register = () => {
 };
 
 export default Register;
+

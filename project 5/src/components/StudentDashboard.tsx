@@ -11,12 +11,34 @@ const StudentDashboard = () => {
   const [grades, setGrades] = useState<Grade[]>([]);
   const [loading, setLoading] = useState(true);
   const [clockInError, setClockInError] = useState('');
+  const [studentName, setStudentName] = useState('');
+  const [studentRole, setStudentRole] = useState('');
 
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
+
+        console.log('User ID:', user.id);
+
+        // Fetch name + role from users table
+        const { data: profileData, error: profileError } = await supabase
+          .from('users')
+          .select('full_name, role')
+          .eq('id', user.id)
+          .single();
+
+        console.log('Profile data:', profileData);
+        console.log('Profile error:', profileError);
+
+        if (profileData?.full_name) {
+          setStudentName(profileData.full_name);
+        }
+
+        if (profileData?.role) {
+          setStudentRole(profileData.role);
+        }
 
         // Fetch enrolled courses
         const { data: enrolledCourses } = await supabase
@@ -71,20 +93,17 @@ const StudentDashboard = () => {
       const currentHour = now.getHours();
       const currentMinutes = now.getMinutes();
 
-      // Check if within 15-minute window (8:45 AM - 9:15 AM for morning classes)
-      const isMorningWindow = (currentHour === 8 && currentMinutes >= 45) || 
-                             (currentHour === 9 && currentMinutes <= 15);
+      const isMorningWindow = (currentHour === 8 && currentMinutes >= 45) ||
+                              (currentHour === 9 && currentMinutes <= 15);
 
-      // Check if within 15-minute window (1:45 PM - 2:15 PM for afternoon classes)
-      const isAfternoonWindow = (currentHour === 13 && currentMinutes >= 45) || 
-                               (currentHour === 14 && currentMinutes <= 15);
+      const isAfternoonWindow = (currentHour === 13 && currentMinutes >= 45) ||
+                                (currentHour === 14 && currentMinutes <= 15);
 
       if (!isMorningWindow && !isAfternoonWindow) {
         setClockInError(t('dashboard.student.outsideWindow'));
         return;
       }
 
-      // Check if already clocked in today
       const today = new Date().toISOString().split('T')[0];
       const { data: existingAttendance } = await supabase
         .from('attendance')
@@ -98,9 +117,8 @@ const StudentDashboard = () => {
         return;
       }
 
-      // Determine status based on time
-      const isLate = (currentHour === 9 && currentMinutes > 0) || 
-                    (currentHour === 14 && currentMinutes > 0);
+      const isLate = (currentHour === 9 && currentMinutes > 0) ||
+                     (currentHour === 14 && currentMinutes > 0);
       const status = isLate ? 'late' : 'present';
 
       const { data, error } = await supabase
@@ -136,8 +154,14 @@ const StudentDashboard = () => {
   return (
     <div className="space-y-8">
       <h1 className="text-3xl font-bold text-gray-800">
-        {t('dashboard.student.title')}
+        {studentName ? `${studentName}'s Dashboard` : t('dashboard.student.title')}
       </h1>
+
+      {studentName && studentRole && (
+        <p className="text-gray-600 text-lg">
+          Welcome back, <span className="font-semibold">{studentName}</span>! You are logged in as a <span className="italic">{studentRole}</span>.
+        </p>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Courses Section */}
@@ -254,3 +278,4 @@ const StudentDashboard = () => {
 };
 
 export default StudentDashboard;
+
