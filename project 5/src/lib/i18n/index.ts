@@ -13,9 +13,11 @@ i18n
       ar: { translation: ar }
     },
     fallbackLng: 'en',
+    debug: true, // Add this for logging language detection
     interpolation: {
       escapeValue: false
     }
   });
 
 export default i18n;
+
