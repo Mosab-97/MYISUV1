@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Clock, GraduationCap, BookOpen } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import Sidebar from './Sidebar';
+import CoursesSection from './CoursesSection';
+import UpcomingAssignments from './UpcomingAssignments';
+import CalendarView from './CalendarView';
+import AttendanceCalendar from './AttendanceCalendar';
+import Notifications from './Notifications';
 import type { Course, Attendance, Grade } from '../types';
 
 const StudentDashboard = () => {
@@ -10,9 +16,9 @@ const StudentDashboard = () => {
   const [attendance, setAttendance] = useState<Attendance[]>([]);
   const [grades, setGrades] = useState<Grade[]>([]);
   const [loading, setLoading] = useState(true);
-  const [clockInError, setClockInError] = useState('');
   const [studentName, setStudentName] = useState('');
   const [studentRole, setStudentRole] = useState('');
+  const [clockInError, setClockInError] = useState('');
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -20,7 +26,7 @@ const StudentDashboard = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
-        console.log('User ID:', user.id);
+        console.log('User ID:', user.id); // Debugging statement
 
         // Fetch name + role from users table
         const { data: profileData, error: profileError } = await supabase
@@ -29,13 +35,9 @@ const StudentDashboard = () => {
           .eq('id', user.id)
           .single();
 
-        console.log('Profile data:', profileData);
-        console.log('Profile error:', profileError);
-
         if (profileData?.full_name) {
           setStudentName(profileData.full_name);
         }
-
         if (profileData?.role) {
           setStudentRole(profileData.role);
         }
@@ -53,7 +55,7 @@ const StudentDashboard = () => {
           setCourses(enrolledCourses.map((ec: any) => ec.courses));
         }
 
-        // Fetch attendance
+        // Fetch attendance data
         const { data: attendanceData } = await supabase
           .from('attendance')
           .select('*')
@@ -64,7 +66,7 @@ const StudentDashboard = () => {
           setAttendance(attendanceData);
         }
 
-        // Fetch grades
+        // Fetch grades data
         const { data: gradesData } = await supabase
           .from('grades')
           .select('*')
@@ -152,125 +154,28 @@ const StudentDashboard = () => {
   }
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-bold text-gray-800">
-        {studentName ? `${studentName}'s Dashboard` : t('dashboard.student.title')}
-      </h1>
+    <div className="flex">
+      <Sidebar />
+      <div className="flex-1 p-6 space-y-8">
+        <h1 className="text-3xl font-bold text-gray-800">
+          {studentName ? `${studentName}'s Dashboard` : t('dashboard.student.title')}
+        </h1>
 
-      {studentName && studentRole && (
-        <p className="text-gray-600 text-lg">
-          Welcome back, <span className="font-semibold">{studentName}</span>! You are logged in as a <span className="italic">{studentRole}</span>.
-        </p>
-      )}
+        {studentName && studentRole && (
+          <p className="text-gray-600 text-lg">
+            Welcome back, <span className="font-semibold">{studentName}</span>! You are logged in as a <span className="italic">{studentRole}</span>.
+          </p>
+        )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Courses Section */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center space-x-2 mb-4">
-            <BookOpen className="h-6 w-6 text-blue-600" />
-            <h2 className="text-xl font-semibold">{t('dashboard.student.myCourses')}</h2>
-          </div>
-          <div className="space-y-2">
-            {courses.length === 0 ? (
-              <p className="text-gray-500">{t('dashboard.student.noCourses')}</p>
-            ) : (
-              courses.map((course) => (
-                <div
-                  key={course.id}
-                  className="p-3 bg-gray-50 rounded-md"
-                >
-                  <p className="font-medium">{course.course_name}</p>
-                  <p className="text-sm text-gray-600">{course.course_code}</p>
-                </div>
-              ))
-            )}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <CoursesSection courses={courses} />
+          <UpcomingAssignments assignments={[]} />
+          <CalendarView />
         </div>
 
-        {/* Attendance Section */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center space-x-2 mb-4">
-            <Clock className="h-6 w-6 text-blue-600" />
-            <h2 className="text-xl font-semibold">{t('dashboard.student.attendance')}</h2>
-          </div>
-          <div className="mb-4">
-            <button
-              onClick={handleClockIn}
-              className="btn btn-primary w-full mb-2"
-            >
-              {t('dashboard.student.clockIn')}
-            </button>
-            {clockInError && (
-              <p className="text-red-600 text-sm">{clockInError}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            {attendance.length === 0 ? (
-              <p className="text-gray-500">{t('dashboard.student.noAttendance')}</p>
-            ) : (
-              attendance.map((record) => (
-                <div
-                  key={record.id}
-                  className={`p-3 rounded-md ${
-                    record.status === 'present'
-                      ? 'bg-green-50'
-                      : record.status === 'late'
-                      ? 'bg-yellow-50'
-                      : 'bg-red-50'
-                  }`}
-                >
-                  <p className="font-medium">
-                    {new Date(record.date).toLocaleDateString()}
-                  </p>
-                  <p className={`text-sm ${
-                    record.status === 'present'
-                      ? 'text-green-600'
-                      : record.status === 'late'
-                      ? 'text-yellow-600'
-                      : 'text-red-600'
-                  }`}>
-                    {t(`dashboard.student.status.${record.status}`)}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {new Date(record.clock_in_time).toLocaleTimeString()}
-                  </p>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Grades Section */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center space-x-2 mb-4">
-            <GraduationCap className="h-6 w-6 text-blue-600" />
-            <h2 className="text-xl font-semibold">{t('dashboard.student.grades')}</h2>
-          </div>
-          <div className="space-y-2">
-            {grades.length === 0 ? (
-              <p className="text-gray-500">{t('dashboard.student.noGrades')}</p>
-            ) : (
-              grades.map((grade) => (
-                <div
-                  key={grade.id}
-                  className={`p-3 rounded-md ${
-                    grade.final_grade >= 90
-                      ? 'bg-green-50'
-                      : grade.final_grade >= 70
-                      ? 'bg-yellow-50'
-                      : 'bg-red-50'
-                  }`}
-                >
-                  <p className="font-medium">
-                    Grade: {grade.final_grade}%
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Posted: {new Date(grade.posted_at).toLocaleDateString()}
-                  </p>
-                </div>
-              ))
-            )}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+          <AttendanceCalendar attendance={attendance} />
+          <Notifications />
         </div>
       </div>
     </div>
